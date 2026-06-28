@@ -7,21 +7,36 @@
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-  <header>
-    <div class="logo">KickStream</div>
+  <header class="site-header">
+    <a class="logo" href="index.html">KickStream</a>
     <nav>
-      <a href="index.html">Catálogo</a>
+      <a class="active" href="index.html">Catálogo</a>
       <a href="sobre.html">Sobre</a>
       <a href="contato.html">Contato</a>
     </nav>
   </header>
 
   <section class="hero">
-    <h1>O streaming do futebol brasileiro</h1>
-    <p>Catálogo de jogos do projeto KickStream.</p>
+    <div class="hero-content">
+      <span class="eyebrow">Ao vivo, replays e próximos jogos</span>
+      <h1>O streaming do futebol brasileiro</h1>
+      <p>Catálogo de jogos do projeto KickStream com partidas ao vivo, confrontos encerrados e transmissões em breve.</p>
+      <div class="hero-actions">
+        <a class="button-link" href="#catalogo">Ver partidas</a>
+        <a class="button-link secondary" href="sobre.html">Conhecer projeto</a>
+      </div>
+    </div>
+    <div class="hero-panel" aria-label="Resumo do catálogo">
+      <strong>3</strong>
+      <span>partidas disponíveis</span>
+    </div>
   </section>
 
   <section class="filters">
+    <div>
+      <span class="section-label">Filtrar catálogo</span>
+      <h2>Encontre seu jogo</h2>
+    </div>
     <select id="filtroCampeonato" onchange="filtrar()">
       <option value="">Todos os campeonatos</option>
       <option value="Brasileirao">Brasileirao</option>
@@ -37,9 +52,10 @@
   </section>
 
   <main class="grid" id="catalogo">
-    <div class="card" data-campeonato="Brasileirao" data-status="Ao vivo">
-      <div class="thumb">KS</div>
+    <div class="card live" data-campeonato="Brasileirao" data-status="Ao vivo">
+      <div class="thumb"><span>KS</span></div>
       <div class="content">
+        <span class="tag">Brasileirao</span>
         <h2>Flamengo x Palmeiras</h2>
         <p><strong>Campeonato:</strong> Brasileirao</p>
         <p><strong>Data:</strong> 2026-06-28 às 16:00</p>
@@ -51,8 +67,9 @@
     </div>
 
     <div class="card" data-campeonato="Copa do Brasil" data-status="Encerrado">
-      <div class="thumb">KS</div>
+      <div class="thumb"><span>KS</span></div>
       <div class="content">
+        <span class="tag">Copa do Brasil</span>
         <h2>Sao Paulo x Gremio</h2>
         <p><strong>Campeonato:</strong> Copa do Brasil</p>
         <p><strong>Data:</strong> 2026-06-27 às 21:30</p>
@@ -63,9 +80,10 @@
       </div>
     </div>
 
-    <div class="card" data-campeonato="Libertadores" data-status="Em breve">
-      <div class="thumb">KS</div>
+    <div class="card upcoming" data-campeonato="Libertadores" data-status="Em breve">
+      <div class="thumb"><span>KS</span></div>
       <div class="content">
+        <span class="tag">Libertadores</span>
         <h2>Corinthians x Boca Juniors</h2>
         <p><strong>Campeonato:</strong> Libertadores</p>
         <p><strong>Data:</strong> 2026-07-02 às 19:00</p>
