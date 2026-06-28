@@ -1,0 +1,157 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #0f0f0f;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 40px;
+  background: #050505;
+}
+
+.logo {
+  color: #e50914;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+nav a {
+  margin-left: 20px;
+  color: white;
+  text-decoration: none;
+}
+
+.hero {
+  padding: 50px 40px;
+  background: linear-gradient(90deg, #111, #222);
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: 42px;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  padding: 20px 40px;
+}
+
+select,
+input,
+textarea {
+  padding: 12px;
+  border: 0;
+  border-radius: 6px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 22px;
+  padding: 20px 40px 50px;
+}
+
+.card {
+  overflow: hidden;
+  background: #1c1c1c;
+  border-radius: 12px;
+  box-shadow: 0 0 12px #000;
+}
+
+.thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 150px;
+  background: #e50914;
+  font-size: 38px;
+  font-weight: bold;
+}
+
+.content {
+  padding: 18px;
+}
+
+.content h2 {
+  margin-top: 0;
+}
+
+.status {
+  color: #00ff99;
+}
+
+button {
+  padding: 12px 18px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  background: #e50914;
+  border: 0;
+  border-radius: 6px;
+}
+
+footer {
+  padding: 20px;
+  color: #aaa;
+  text-align: center;
+  background: #050505;
+}
+
+.page-simple {
+  min-height: 100vh;
+  padding: 40px;
+  background: #111;
+}
+
+.simple-card {
+  max-width: 720px;
+}
+
+.simple-card a {
+  color: #e50914;
+}
+
+.simple-card input,
+.simple-card textarea {
+  display: block;
+  width: min(100%, 360px);
+  margin: 10px 0;
+}
+
+@media (max-width: 640px) {
+  header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+  }
+
+  nav a {
+    margin: 0 16px 0 0;
+  }
+
+  .hero,
+  .filters,
+  .grid,
+  .page-simple {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+
+  .hero h1 {
+    font-size: 32px;
+  }
+}

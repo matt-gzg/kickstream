@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KickStream</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header>
+    <div class="logo">KickStream</div>
+    <nav>
+      <a href="index.html">Catálogo</a>
+      <a href="sobre.html">Sobre</a>
+      <a href="contato.html">Contato</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>O streaming do futebol brasileiro</h1>
+    <p>Catálogo de jogos do projeto KickStream.</p>
+  </section>
+
+  <section class="filters">
+    <select id="filtroCampeonato" onchange="filtrar()">
+      <option value="">Todos os campeonatos</option>
+      <option value="Brasileirao">Brasileirao</option>
+      <option value="Copa do Brasil">Copa do Brasil</option>
+      <option value="Libertadores">Libertadores</option>
+    </select>
+    <select id="filtroStatus" onchange="filtrar()">
+      <option value="">Todos os status</option>
+      <option value="Ao vivo">Ao vivo</option>
+      <option value="Encerrado">Encerrado</option>
+      <option value="Em breve">Em breve</option>
+    </select>
+  </section>
+
+  <main class="grid" id="catalogo">
+    <div class="card" data-campeonato="Brasileirao" data-status="Ao vivo">
+      <div class="thumb">KS</div>
+      <div class="content">
+        <h2>Flamengo x Palmeiras</h2>
+        <p><strong>Campeonato:</strong> Brasileirao</p>
+        <p><strong>Data:</strong> 2026-06-28 às 16:00</p>
+        <p><strong>Placar:</strong> 1 x 1</p>
+        <p><strong>Status:</strong> <span class="status">Ao vivo</span></p>
+        <p><strong>Avaliação:</strong> 4.9 | <strong>Duração:</strong> 90 min</p>
+        <button onclick="assistir('Flamengo x Palmeiras')">Assistir</button>
+      </div>
+    </div>
+
+    <div class="card" data-campeonato="Copa do Brasil" data-status="Encerrado">
+      <div class="thumb">KS</div>
+      <div class="content">
+        <h2>Sao Paulo x Gremio</h2>
+        <p><strong>Campeonato:</strong> Copa do Brasil</p>
+        <p><strong>Data:</strong> 2026-06-27 às 21:30</p>
+        <p><strong>Placar:</strong> 2 x 0</p>
+        <p><strong>Status:</strong> <span class="status">Encerrado</span></p>
+        <p><strong>Avaliação:</strong> 4.7 | <strong>Duração:</strong> 95 min</p>
+        <button onclick="assistir('Sao Paulo x Gremio')">Assistir</button>
+      </div>
+    </div>
+
+    <div class="card" data-campeonato="Libertadores" data-status="Em breve">
+      <div class="thumb">KS</div>
+      <div class="content">
+        <h2>Corinthians x Boca Juniors</h2>
+        <p><strong>Campeonato:</strong> Libertadores</p>
+        <p><strong>Data:</strong> 2026-07-02 às 19:00</p>
+        <p><strong>Placar:</strong> -</p>
+        <p><strong>Status:</strong> <span class="status">Em breve</span></p>
+        <p><strong>Avaliação:</strong> - | <strong>Duração:</strong> - min</p>
+        <button onclick="assistir('Corinthians x Boca Juniors')">Assistir</button>
+      </div>
+    </div>
+  </main>
+
+  <footer>KickStream | Projeto Final de Computação em Nuvem</footer>
+  <script src="assets/js/script.js"></script>
+</body>
+</html>

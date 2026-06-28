@@ -1,0 +1,26 @@
+#!/bin/bash
+set -euo pipefail
+
+REPO_URL="COLOQUE_A_URL_DO_REPOSITORIO_AQUI"
+APP_DIR="/opt/kickstream"
+WEB_DIR="/usr/share/nginx/html"
+
+if [ "$REPO_URL" = "COLOQUE_A_URL_DO_REPOSITORIO_AQUI" ]; then
+  echo "Configure a variavel REPO_URL com a URL do repositorio Git antes de usar este user data."
+  exit 1
+fi
+
+dnf update -y
+dnf install -y git nginx
+
+rm -rf "$APP_DIR"
+git clone --depth 1 "$REPO_URL" "$APP_DIR"
+
+mkdir -p "$WEB_DIR"
+rm -rf "$WEB_DIR"/*
+cp -a "$APP_DIR/public/." "$WEB_DIR/"
+
+chown -R nginx:nginx "$WEB_DIR"
+
+systemctl enable nginx
+systemctl restart nginx
