@@ -1,11 +1,11 @@
 #!/bin/bash
 set -euo pipefail
 
-REPO_URL="COLOQUE_A_URL_DO_REPOSITORIO_AQUI"
+REPO_URL="https://github.com/matt-gzg/kickstream"
 APP_DIR="/opt/kickstream"
 WEB_DIR="/usr/share/nginx/html"
 
-if [ "$REPO_URL" = "COLOQUE_A_URL_DO_REPOSITORIO_AQUI" ]; then
+if [ "$REPO_URL" = "https://github.com/matt-gzg/kickstream" ]; then
   echo "Configure a variavel REPO_URL com a URL do repositorio Git antes de usar este user data."
   exit 1
 fi
