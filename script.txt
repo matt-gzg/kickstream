@@ -6,7 +6,7 @@ APP_DIR="/opt/kickstream"
 WEB_DIR="/usr/share/nginx/html"
 
 dnf update -y
-dnf install -y git nginx
+dnf install -y git nginx python3 awscli
 
 rm -rf "$APP_DIR"
 git clone --depth 1 "$REPO_URL" "$APP_DIR"
@@ -14,8 +14,124 @@ git clone --depth 1 "$REPO_URL" "$APP_DIR"
 mkdir -p "$WEB_DIR"
 rm -rf "$WEB_DIR"/*
 cp -a "$APP_DIR/public/." "$WEB_DIR/"
-
 chown -R nginx:nginx "$WEB_DIR"
 
+# Busca os dados do DynamoDB
+aws dynamodb scan \
+  --table-name kickstream-jogos \
+  --region us-east-2 \
+  --output json > /tmp/jogos.json
+
+# Gera o index.html dinamicamente
+python3 << 'PY'
+import json
+
+with open('/tmp/jogos.json', encoding='utf-8') as f:
+    data = json.load(f)
+
+items = data.get("Items", [])
+
+# Ordena por data
+items.sort(key=lambda x: (x.get("data", {}).get("S", ""), x.get("horario", {}).get("S", "")))
+
+def get(item, key, default=""):
+    v = item.get(key, {})
+    return v.get("S") or v.get("N") or default
+
+cards = ""
+campeonatos = set()
+status_set = set()
+
+for item in items:
+    titulo     = get(item, "titulo")
+    campeonato = get(item, "campeonato")
+    data_jogo  = get(item, "data")
+    horario    = get(item, "horario")
+    placar     = get(item, "placar", "-")
+    status     = get(item, "status")
+    avaliacao  = get(item, "avaliacao", "-")
+    duracao    = get(item, "duracao_min", "-")
+
+    campeonatos.add(campeonato)
+    status_set.add(status)
+
+    # Classe extra para cards especiais
+    extra_class = ""
+    if status == "Em Breve":
+        extra_class = " upcoming"
+
+    placar_display  = placar if placar != "-" else "-"
+    aval_display    = avaliacao if avaliacao != "-" else "-"
+    dur_display     = f"{duracao} min" if duracao != "-" else "-"
+
+    cards += f'''
+    <div class="card{extra_class}" data-campeonato="{campeonato}" data-status="{status}">
+      <div class="thumb"><span>KS</span></div>
+      <div class="content">
+        <span class="tag">{campeonato}</span>
+        <h2>{titulo}</h2>
+        <p><strong>Campeonato:</strong> {campeonato}</p>
+        <p><strong>Data:</strong> {data_jogo} às {horario}</p>
+        <p><strong>Placar:</strong> {placar_display}</p>
+        <p><strong>Status:</strong> <span class="status">{status}</span></p>
+        <p><strong>Avaliação:</strong> {aval_display} | <strong>Duração:</strong> {dur_display}</p>
+        <button onclick="assistir('{titulo}')">Assistir</button>
+      </div>
+    </div>'''
+
+total = len(items)
+disponiveis = sum(1 for i in items if get(i, "status") == "Disponível")
+
+campeonato_options = '<option value="">Todos os campeonatos</option>' + ''.join(
+    f'<option value="{c}">{c}</option>' for c in sorted(campeonatos)
+)
+status_options = '<option value="">Todos os status</option>' + ''.join(
+    f'<option value="{s}">{s}</option>' for s in sorted(status_set)
+)
+
+# Lê o index.html clonado do repo para preservar <head>, header, footer etc.
+with open('/usr/share/nginx/html/index.html', encoding='utf-8') as f:
+    original = f.read()
+
+# Substitui o bloco de cards dentro de <main class="grid" id="catalogo">
+import re
+
+# Substitui o conteúdo do <main id="catalogo">
+new_main = f'<main class="grid" id="catalogo">\n{cards}\n  </main>'
+result = re.sub(
+    r'<main class="grid" id="catalogo">.*?</main>',
+    new_main,
+    original,
+    flags=re.DOTALL
+)
+
+# Atualiza o contador no hero-panel
+result = re.sub(
+    r'(<strong>)\d+(</strong>\s*<span>partidas)',
+    rf'\g<1>{disponiveis}\g<2>',
+    result
+)
+
+# Atualiza os <option> dos filtros
+result = re.sub(
+    r'<select id="filtroCampeonato"[^>]*>.*?</select>',
+    f'<select id="filtroCampeonato" onchange="filtrar()">{campeonato_options}</select>',
+    result,
+    flags=re.DOTALL
+)
+result = re.sub(
+    r'<select id="filtroStatus"[^>]*>.*?</select>',
+    f'<select id="filtroStatus" onchange="filtrar()">{status_options}</select>',
+    result,
+    flags=re.DOTALL
+)
+
+with open('/usr/share/nginx/html/index.html', 'w', encoding='utf-8') as f:
+    f.write(result)
+
+print(f"index.html gerado com {total} jogos ({disponiveis} disponíveis).")
+PY
+
+chown -R nginx:nginx "$WEB_DIR"
 systemctl enable nginx
 systemctl restart nginx
